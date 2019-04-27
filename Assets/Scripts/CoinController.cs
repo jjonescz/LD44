@@ -8,6 +8,7 @@ public class CoinController : MonoBehaviour
     public bool moving;
     public Animator anim;
     GameObject gameFlow;
+    public Vector3 smer;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +22,10 @@ public class CoinController : MonoBehaviour
     {
         if (moving)
         {
-            power -= 0.1f;
+            power -= 0.3f;
             if (power < 0)
             {
-                moving = false;
-                anim.SetBool("end", true);
+                Stop();
             }
         }
     }
@@ -35,10 +35,29 @@ public class CoinController : MonoBehaviour
         power = actualPower;
         moving = true;
         gameFlow.GetComponent<GameFlow>().ControlArena();
+        smer = GetDirection();
+        gameObject.GetComponentInParent<Rigidbody>().AddForce(GetDirection() * power * 10);
     }
 
     Vector3 GetDirection()
     {
         return gameObject.transform.parent.transform.forward;
+    }
+
+    void Stop()
+    {
+        moving = false;
+        anim.SetBool("end", true);
+        GameObject.Find("Arena").GetComponent<ArenaMove>().StopMoving();
+        StartCoroutine(Drag());
+        
+    }
+
+    IEnumerator Drag()
+    {
+        float actualDrag = gameObject.GetComponentInParent<Rigidbody>().drag;
+        gameObject.GetComponentInParent<Rigidbody>().drag = 2;
+        yield return new WaitForSeconds(4);
+        gameObject.GetComponentInParent<Rigidbody>().drag = actualDrag;
     }
 }

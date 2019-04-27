@@ -95,12 +95,33 @@ public class RandomKeys : MonoBehaviour
                     Vector2 middle = new Vector2((points[1].transform.localPosition.x + points[2].transform.localPosition.x) / 2, (points[1].transform.localPosition.y + points[2].transform.localPosition.y) / 2);
                     Vector2 center = new Vector2((points[0].transform.localPosition.x + middle.x) / 2, (points[0].transform.localPosition.y + middle.y) / 2);
                     power = middle.magnitude;
+                    DeleteAll();
                     coinController.StartMoveWithPower(power);
+
                     
                 }
 
             }
 
         }
+    }
+
+    void DeleteAll()
+    {
+        for (int j = 0; j < keys.Count; j++)
+        {
+            Destroy(keys[j]);
+        }
+
+        for (int j = 0; j < active.Count; j++)
+        {
+            active[j] = false;
+        }
+        active.Clear();
+        number.Clear();
+        move.Clear();
+        points.Clear();
+        keys.Clear();
+        used.Clear();
     }
 }

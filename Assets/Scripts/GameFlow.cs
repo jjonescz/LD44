@@ -102,6 +102,7 @@ public class GameFlow : MonoBehaviour
     /// </summary>
     public void ControlArena()
     {
+        randomKeys.enabled = false;
         arenaController.enabled = true;
         coinRotationAnim.enabled = true;
 
