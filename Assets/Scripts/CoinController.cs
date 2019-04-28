@@ -8,7 +8,8 @@ public class CoinController : MonoBehaviour
     public bool moving;
     public Animator anim;
     GameObject gameFlow;
-    public Vector3 smer;
+    public AudioSource spinAudi;
+    public AudioSource endAudi;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +23,7 @@ public class CoinController : MonoBehaviour
     {
         if (moving)
         {
-            power -= 0.3f;
+            power -= 0.4f;
             if (power < 0)
             {
                 Stop();
@@ -32,10 +33,12 @@ public class CoinController : MonoBehaviour
 
     public void StartMoveWithPower(float actualPower)
     {
+        SpustAnim();
+        spinAudi.Play();
         power = actualPower;
         moving = true;
+        GameObject.Find("Arena").GetComponent<ArenaMove>().StartMoving();
         gameFlow.GetComponent<GameFlow>().ControlArena();
-        smer = GetDirection();
         gameObject.GetComponentInParent<Rigidbody>().AddForce(GetDirection() * power * 10);
     }
 
@@ -48,9 +51,18 @@ public class CoinController : MonoBehaviour
     {
         moving = false;
         anim.SetBool("end", true);
+        anim.SetBool("shooted", false);
+        spinAudi.Stop();
+        endAudi.Play();
         GameObject.Find("Arena").GetComponent<ArenaMove>().StopMoving();
         StartCoroutine(Drag());
         
+    }
+
+    public void SpustAnim()
+    {
+        anim.SetBool("shooted", true);
+        anim.SetBool("end", false);
     }
 
     IEnumerator Drag()
@@ -59,5 +71,7 @@ public class CoinController : MonoBehaviour
         gameObject.GetComponentInParent<Rigidbody>().drag = 2;
         yield return new WaitForSeconds(4);
         gameObject.GetComponentInParent<Rigidbody>().drag = actualDrag;
+        Singleton.Instance.moves++;
+        gameFlow.GetComponent<GameFlow>().StartChoosingCoinDirection();
     }
 }

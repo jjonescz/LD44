@@ -1,34 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameFlow : MonoBehaviour
 {
-    [SerializeField] GameObject coin;
-    [SerializeField] GameObject arena;
-    [SerializeField] Canvas canvas;
+    public GameObject coin;
+    public GameObject arena;
+    public Canvas canvas;
+    public GameObject messagePanelPrefab;
+    public GameObject gameCam;
 
-    GameObject coinCamera;
-    GameObject arenaCamera;
+    GameObject coinCam;
+    GameObject mapCam;
 
     CoinDirection coinDirection;
     ArenaMove arenaController;
     Animator coinRotationAnim;
     RandomKeys randomKeys;
+    bool helpShown;
 
-    // TODO: Change these names if you come up with better ones
+    WallHider wallHider;
+    
     enum GameState { ShowArena, CoinDirection, CoinForce, ControlArena }
     GameState currentState;
 
     void Awake()
     {
-        coinCamera = coin.transform.Find("Camera").gameObject;
-        arenaCamera  = arena.transform.Find("Camera").gameObject;
+        coinCam = coin.Find("Camera");
+        mapCam  = arena.Find("MapCamera");
 
         coinDirection = coin.GetComponent<CoinDirection>();
         arenaController = arena.GetComponent<ArenaMove>();
         coinRotationAnim = coin.GetComponentInChildren<Animator>();
         randomKeys = canvas.GetComponentInChildren<RandomKeys>();
+
+        wallHider = new WallHider(coin, coinCam);
 
         currentState = GameState.ShowArena;
     }
@@ -36,8 +41,9 @@ public class GameFlow : MonoBehaviour
     void Start()
     {
         // disable all cameras to be sure
-        coinCamera.SetActive(false);
-        arenaCamera.SetActive(false);
+        coinCam.SetActive(false);
+        mapCam.SetActive(false);
+        gameCam.SetActive(false);
 
         // disable all scripts to be sure
         coinDirection.enabled = false;
@@ -48,7 +54,7 @@ public class GameFlow : MonoBehaviour
         ShowArena();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
@@ -65,28 +71,36 @@ public class GameFlow : MonoBehaviour
                     // RandomKeys handles this itself
                     break;
                 case (GameState.ControlArena):
-                    StartChoosingCoinDirection();
+                    // GameFlow doesn't handle this
+                    // CoinController handles this itself
                     break;
             }
-
         }
+
+        if (currentState == GameState.CoinForce) wallHider.HideWalls();
     }
 
     void ShowArena()
     {
-        arenaCamera.SetActive(true);
+        mapCam.SetActive(true);
+        ShowMessage("Press Enter to start the game.");
     }
 
-    void StartChoosingCoinDirection()
+    public void StartChoosingCoinDirection()
     {
-        arenaCamera.SetActive(false);
-        coinCamera.SetActive(true);
+        gameCam.SetActive(false);
+        mapCam.SetActive(false);
+        coinCam.SetActive(true);
 
         coinDirection.enabled = true;
         arenaController.enabled = false;
         coinRotationAnim.enabled = false;
 
+        coinCam.GetComponent<Camera>().fieldOfView = 60f;
+
         currentState = GameState.CoinDirection;
+
+        ShowMessage("Use arrows to turn the coin. When ready, press Enter.");
     }
 
     void StartChoosingCoinForce()
@@ -94,7 +108,11 @@ public class GameFlow : MonoBehaviour
         coinDirection.enabled = false;
         randomKeys.enabled = true;
 
+        coinCam.GetComponent<Camera>().fieldOfView = 22f;
+
         currentState = GameState.CoinForce;
+
+        ShowMessage("Press three of the letters you see on screen. The center of these letters will determine where you spin the coin.");
     }
 
     /// <summary>
@@ -102,10 +120,47 @@ public class GameFlow : MonoBehaviour
     /// </summary>
     public void ControlArena()
     {
+        HideLastMessage();
+        wallHider.ShowHiddenWalls();
+
         randomKeys.enabled = false;
         arenaController.enabled = true;
         coinRotationAnim.enabled = true;
 
+        coinCam.SetActive(false);
+        gameCam.SetActive(true);
+
         currentState = GameState.ControlArena;
+
+        ShowMessage("Use arrows to tilt the arena.");
+        helpShown = true;
+    }
+
+    /// <summary>
+    /// Call to start the game again!
+    /// </summary>
+    public void RestartCoin()
+    {
+        StartChoosingCoinDirection();
+    }
+
+    GameObject panel;
+
+    // Use this to show message to the player
+    void ShowMessage(string message)
+    {
+        HideLastMessage();
+
+        // Don't show the help twice.
+        if (helpShown)
+            return;
+
+        panel = Instantiate(messagePanelPrefab, canvas.transform);
+        panel.GetComponentInChildren<Text>().text = message;
+    }
+
+    void HideLastMessage()
+    {
+        if (panel != null) Destroy(panel);
     }
 }

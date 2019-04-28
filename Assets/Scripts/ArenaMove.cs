@@ -10,18 +10,15 @@ public static class GameObjectHelpers
 
 public class ArenaMove : MonoBehaviour
 {
-    GameObject coin, coinCamera;
+    GameObject coin;
     float width, height; // Plane size
-    bool canMove = false;
-    bool moving;
+    bool moving = true, stopping;
+    float prevFwd, prevLeft;
 
     // Start is called before the first frame update
     void Start()
     {
-        moving = canMove;
-
         coin = GameObject.Find("Coin");
-        coinCamera = coin.Find("Camera");
 
         // Plane is 10x10 mesh.
         width = gameObject.transform.localScale.x * 10f;
@@ -34,10 +31,13 @@ public class ArenaMove : MonoBehaviour
         if (!moving)
             return;
 
-        const float factor = 3;
+        const float factor = 4;
+        const float delta = 0.05f;
 
-        float fwd = Input.GetAxis("X");
-        float left = Input.GetAxis("Y");
+        float fwd = Mathf.Clamp(Input.GetAxis("X"), prevFwd - delta, prevFwd + delta);
+        float left = Mathf.Clamp(Input.GetAxis("Y"), prevLeft - delta, prevLeft + delta);
+        prevFwd = fwd;
+        prevLeft = left;
 
         // Get coin's position relative to arena's.
         var relX = Mathf.Abs(coin.transform.position.x) / width * 2f;
@@ -48,19 +48,27 @@ public class ArenaMove : MonoBehaviour
         body.MoveRotation(Quaternion.Euler(factor * left * (1f - relZ), 0f, -factor * fwd * (1f - relX)));
     }
 
+    static float NormalizeAngle(float angle)
+    {
+        if (angle > 180f) return angle - 360f;
+        return angle;
+    }
+    static Vector3 NormalizeAngles(Vector3 angles)
+        => new Vector3(NormalizeAngle(angles.x), NormalizeAngle(angles.y), NormalizeAngle(angles.z));
+
     void Update()
     {
-        const float maxDist = 0.5f;
+        if (!stopping)
+            return;
 
-        // Move camera to look in direction of the coin's movement.
-        var coinDirection = coin.GetComponent<Rigidbody>().velocity.normalized;
-        if (coinDirection != Vector3.zero)
-        {
-            Vector3 newPosition = new Vector3(0f, 3f, 0f) - coinDirection * 10f;
-            coinCamera.transform.position = Vector3.MoveTowards(coinCamera.transform.position,
-                coin.transform.position + newPosition, maxDist);
-            coinCamera.transform.LookAt(coin.transform.position);
-        }
+        // Reset rotation.
+        var body = gameObject.GetComponent<Rigidbody>();
+        var rot = NormalizeAngles(body.rotation.eulerAngles);
+        Vector3 d = Vector3.MoveTowards(rot, Vector3.zero, 0.1f);
+        body.MoveRotation(Quaternion.Euler(d));
+
+        if (body.rotation.eulerAngles == Vector3.zero)
+            stopping = false;
     }
 
     public void StopMoving()
@@ -68,15 +76,14 @@ public class ArenaMove : MonoBehaviour
         if (!moving)
             return;
         moving = false;
-
-        // Reset rotation.
-        var body = gameObject.GetComponent<Rigidbody>();
-        body.MoveRotation(Quaternion.Euler(0f, 0f, 0f));
+        stopping = true;
+        prevFwd = 0f;
+        prevLeft = 0f;
     }
 
     public void StartMoving()
     {
-        if (canMove)
-            moving = true;
+        stopping = false;
+        moving = true;
     }
 }

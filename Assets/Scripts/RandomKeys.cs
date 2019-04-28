@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RandomKeys : MonoBehaviour
 {
@@ -20,68 +21,26 @@ public class RandomKeys : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        symbols.Add("R");
-        symbols.Add("T");
-        symbols.Add("U");
-        symbols.Add("I");
-        symbols.Add("O");
-        symbols.Add("P");
-        symbols.Add("F");
-        symbols.Add("G");
-        symbols.Add("H");
-        symbols.Add("J");
-        symbols.Add("K");
-        symbols.Add("L");
-        symbols.Add("V");
-        symbols.Add("B");
-        symbols.Add("N");
-        symbols.Add("M");
-        
-        for (int i = 0; i < 16; i++)
-        {
-            used.Add(i);
-            active.Add(false);
-            number.Add(0);
-        }
 
-        for (int i = 0; i < 10; i++)
-        {
-            int rand = Random.Range(0, used.Count);
-
-            GameObject key = Instantiate(predloha, transform.position, transform.rotation, transform);
-
-            key.SetActive(true);
-
-            key.GetComponentInChildren<Text>().text = symbols[used[rand]];
-
-            number[used[rand]] = i;
-
-            active[used[rand]] = true;
-
-            keys.Add(key);
-
-            move.Add(true);
-
-            used.RemoveAt(rand);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-            for (int i = 0; i < keys.Count; i++)
-            {
-                int x = Random.Range(-1, 2);
-                int y = Random.Range(-1, 2);
-                int jump = 10;
 
-                if (move[i])
-                {
-                    Vector3 pos = new Vector3(keys[i].transform.position.x + x * jump, keys[i].transform.position.y + y * jump, keys[i].transform.position.z);
-                    Vector2 localpos = new Vector2(keys[i].transform.localPosition.x + x * jump, keys[i].transform.localPosition.y + y * jump);
-                    if (localpos.magnitude < 150) keys[i].transform.position = pos;
-                }
+        for (int i = 0; i < keys.Count; i++)
+        {
+            int x = Random.Range(-1, 2);
+            int y = Random.Range(-1, 2);
+            int jump = 10;
+
+            if (move[i])
+            {
+                Vector3 pos = new Vector3(keys[i].transform.position.x + x * jump, keys[i].transform.position.y + y * jump, keys[i].transform.position.z);
+                Vector2 localpos = new Vector2(keys[i].transform.localPosition.x + x * jump, keys[i].transform.localPosition.y + y * jump);
+                if (localpos.magnitude < 200) keys[i].transform.position = pos;
             }
+        }
 
         for (int i = 0; i < symbols.Count; i++)
         {
@@ -106,6 +65,11 @@ public class RandomKeys : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Nastav();
+    }
+
     void DeleteAll()
     {
         for (int j = 0; j < keys.Count; j++)
@@ -123,5 +87,54 @@ public class RandomKeys : MonoBehaviour
         points.Clear();
         keys.Clear();
         used.Clear();
+        symbols.Clear();
+    }
+
+    void Nastav()
+    {
+        symbols.Add("R");
+        symbols.Add("T");
+        symbols.Add("U");
+        symbols.Add("I");
+        symbols.Add("O");
+        symbols.Add("P");
+        symbols.Add("F");
+        symbols.Add("G");
+        symbols.Add("H");
+        symbols.Add("J");
+        symbols.Add("K");
+        symbols.Add("L");
+        symbols.Add("V");
+        symbols.Add("B");
+        symbols.Add("N");
+        symbols.Add("M");
+
+        for (int i = 0; i < 16; i++)
+        {
+            used.Add(i);
+            active.Add(false);
+            number.Add(0);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            int rand = Random.Range(0, used.Count);
+
+            GameObject key = Instantiate(predloha, transform.position, transform.rotation, transform);
+
+            key.SetActive(true);
+
+            key.GetComponentInChildren<TextMeshProUGUI>().text = symbols[used[rand]];
+
+            number[used[rand]] = i;
+
+            active[used[rand]] = true;
+
+            keys.Add(key);
+
+            move.Add(true);
+
+            used.RemoveAt(rand);
+        }
     }
 }
