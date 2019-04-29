@@ -347,6 +347,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinController: {fileID: 0}
   predloha: {fileID: 1158868936345505540}
+  pomoc: 0
+  localpos: {x: 0, y: 0}
+  pom: 0
 --- !u!1 &1491623002221375492
 GameObject:
   m_ObjectHideFlags: 0

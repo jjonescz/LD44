@@ -83,10 +83,10 @@ public class GameFlow : MonoBehaviour
     void ShowArena()
     {
         mapCam.SetActive(true);
-        ShowMessage("Press Enter to start the game.");
+        ShowMessage("Your goal is to beat all enemies by hitting them. Press Enter to start the game.");
     }
 
-    public void StartChoosingCoinDirection()
+    void StartChoosingCoinDirection()
     {
         gameCam.SetActive(false);
         mapCam.SetActive(false);

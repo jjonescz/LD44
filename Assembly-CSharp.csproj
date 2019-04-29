@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\GameFlow.cs" />
     <Compile Include="Assets\Scripts\MainMenuScript.cs" />
     <Compile Include="Assets\Scripts\RandomKeys.cs" />
+    <Compile Include="Assets\Scripts\SetFocus.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\WallHider.cs" />
     <Compile Include="Assets\Scripts\WinSceneScript.cs" />

@@ -72,6 +72,6 @@ public class CoinController : MonoBehaviour
         yield return new WaitForSeconds(4);
         gameObject.GetComponentInParent<Rigidbody>().drag = actualDrag;
         Singleton.Instance.moves++;
-        gameFlow.GetComponent<GameFlow>().StartChoosingCoinDirection();
+        gameFlow.GetComponent<GameFlow>().RestartCoin();
     }
 }

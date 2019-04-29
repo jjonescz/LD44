@@ -576,6 +576,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d822313543ed94845a3f94f5221eccc7, type: 3}
+--- !u!20 &1442008081 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8521428553577372714, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+    type: 3}
+  m_PrefabInstance: {fileID: 1830064207}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503161176
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +672,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coin
       objectReference: {fileID: 0}
+    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+        type: 3}
+      propertyPath: moving
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+        type: 3}
+      propertyPath: power
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+        type: 3}
+      propertyPath: spinAudi
+      value: 
+      objectReference: {fileID: 387818325}
+    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
+        type: 3}
+      propertyPath: endAudi
+      value: 
+      objectReference: {fileID: 387818324}
     - target: {fileID: 2523564466198021026, guid: f3adf0bbd32036c4c94a8af89bc44a14,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -726,31 +757,6 @@ PrefabInstance:
       propertyPath: m_Drag
       value: 0.2
       objectReference: {fileID: 0}
-    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
-        type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
-        type: 3}
-      propertyPath: moving
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
-        type: 3}
-      propertyPath: power
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
-        type: 3}
-      propertyPath: spinAudi
-      value: 
-      objectReference: {fileID: 387818325}
-    - target: {fileID: 7637206957675374156, guid: f3adf0bbd32036c4c94a8af89bc44a14,
-        type: 3}
-      propertyPath: endAudi
-      value: 
-      objectReference: {fileID: 387818324}
     - target: {fileID: 8000647099790366107, guid: f3adf0bbd32036c4c94a8af89bc44a14,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -1071,6 +1077,16 @@ PrefabInstance:
       propertyPath: coinController
       value: 
       objectReference: {fileID: 1332156685}
+    - target: {fileID: 1158868936351072125, guid: 7c66aabc2de6022429231a296b4f15b1,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1442008081}
+    - target: {fileID: 1158868936351072125, guid: 7c66aabc2de6022429231a296b4f15b1,
+        type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 1588994330}
     - target: {fileID: 3301136566950773377, guid: 7c66aabc2de6022429231a296b4f15b1,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1104,6 +1120,21 @@ PrefabInstance:
     - target: {fileID: 2172516890243026630, guid: 7c66aabc2de6022429231a296b4f15b1,
         type: 3}
       propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158868936351072126, guid: 7c66aabc2de6022429231a296b4f15b1,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7339781184352303739, guid: 7c66aabc2de6022429231a296b4f15b1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7339781184352303739, guid: 7c66aabc2de6022429231a296b4f15b1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1281,7 +1312,7 @@ PrefabInstance:
     - target: {fileID: 7835938938541382213, guid: 4c52d48eaa861344aa6e8362b8be50b9,
         type: 3}
       propertyPath: countpm
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c52d48eaa861344aa6e8362b8be50b9, type: 3}

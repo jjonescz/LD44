@@ -15,7 +15,7 @@ public class RandomKeys : MonoBehaviour
     List<bool> active = new List<bool>();
     List<int> number = new List<int>();
     List<GameObject> points = new List<GameObject>();
-
+    public float pomoc;
     float power;
 
     // Start is called before the first frame update
@@ -32,7 +32,7 @@ public class RandomKeys : MonoBehaviour
         {
             int x = Random.Range(-1, 2);
             int y = Random.Range(-1, 2);
-            int jump = 10;
+            int jump = Screen.height / 50;
 
             if (move[i])
             {
@@ -116,13 +116,26 @@ public class RandomKeys : MonoBehaviour
             number.Add(0);
         }
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
             int rand = Random.Range(0, used.Count);
 
             GameObject key = Instantiate(predloha, transform.position, transform.rotation, transform);
 
             key.SetActive(true);
+
+            Vector3 new_pos;
+
+            if (i % 2 == 0)
+            {
+                new_pos = new Vector3((i - 5) * 20, (i - 5) * 20, 0);
+            }
+            else
+            {
+                new_pos = new Vector3(-(i - 6) * 20, (i - 6) * 20, 0);
+            }
+
+            key.transform.localPosition = new_pos;
 
             key.GetComponentInChildren<TextMeshProUGUI>().text = symbols[used[rand]];
 
