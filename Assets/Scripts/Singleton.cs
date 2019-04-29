@@ -29,7 +29,11 @@ public class Singleton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Cancel")) SceneManager.LoadScene("MainMenu");
+        if (Input.GetButtonDown("Cancel"))
+        {
+            moves = 1;
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public void Win()
